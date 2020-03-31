@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="../../../assets/images/logo.png" />
+    <link rel="stylesheet" href="../../../assets/css/typeahead.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap" rel="stylesheet">
+    <link href="../../../assets/css/lightbox.css" rel="stylesheet" />
+    <link href="//vjs.zencdn.net/7.3.0/video-js.min.css" rel="stylesheet">
+    <link href="../../../assets/css/simplePagination.css" rel="stylesheet">
+    <title>
+        <%= user.fullname %>
+    </title>
+    <style>
+        body {
+            background-color: #dbeffb;
+        }
+
+        .row .speN:first-child {
+            margin-top: 0 !important;
+        }
+
+        .redo {
+            pointer-events: none;
+            opacity: 0.5
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light static-top shadow">
+        <div class="container">
+            <a class="navbar-brand" href="/home" data-toggle="tooltip" data-placement="bottom"
+                title="Online Course Booking">
+                <img src="../../../assets/images/logo.png" alt="Online Course Booking" title="Online Course Booking"
+                    style="height: 50px; width: 50px; border-radius: 50%">
+                <span class="website-name">Online Course Booking</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <% if(user) { %>
+                <form class="form-inline my-2 my-lg-0">
+                    <div class="Typeahead">
+                        <div class="u-posRelative">
+                            <input class="Typeahead-hint" type="text" tabindex="-1" readonly>
+                            <input class="defaultTI border" id="demo-input" type="text" name="q"
+                                placeholder="Search about Instructors...">
+                            <img class="Typeahead-spinner" src="../../../assets/images/spinner.gif">
+                            <span class="moveIcon"><i class="fas fa-search"></i></span>
+                        </div>
+                        <div class="Typeahead-menu"></div>
+                    </div>
+                </form>
+                <% } %>
+                <ul class="navbar-nav ml-auto">
+                    <% if(user) { %>
+                    <li class="nav-item">
+                        <a href="/user/profile/logout" class="btn btn-secondary">Logout <i
+                                class="fas fa-sign-out-alt"></i></a>
+                    </li>
+
+                    <% } else { %>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/home" data-toggle="tooltip" data-placement="bottom"
+                            title="Home Page">Home
+                            <span class="sr-only">(current)</span> <i class="fas fa-home"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about" data-toggle="tooltip" data-placement="bottom"
+                            title="About Page">About <i class="fas fa-biohazard"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/terms" data-toggle="tooltip" data-placement="bottom"
+                            title="Terms Page">Terms <i class="fab fa-teamspeak"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/privacy" data-toggle="tooltip" data-placement="bottom"
+                            title="Privacy Page">Privacy <i class="fas fa-user-secret"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact" data-toggle="tooltip" data-placement="bottom"
+                            title="Contact Page">Contact <i class="far fa-id-badge"></i></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            User <i class="far fa-user"></i>
+                        </a>
+                        <div class="dropdown-menu collapse" aria-labelledby="navbarDropdown">
+                            <p class="lead text-center">Role as user</p>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/user/signup">Signup as user <i
+                                    class="fas fa-user-plus"></i></a>
+                            <a class="dropdown-item" href="/user/login">Login as user <i
+                                    class="fas fa-sign-in-alt"></i></a>
+                        </div>
+                    </li>
+                    <% }%>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <%- include('./partials/flashMessages.ejs') -%>
+        <%- include('./partials/errors.ejs') -%>
+        <div class="row">
+            <div class="col-xl-5 col-lg-5 col-md-6">
+                <div class="content bg-white shadow p-3 rounded-lg text-center" style="color: #2f2f2f">
+                    <div class="instructorImage">
+                        <img class="shadow" title="Abdulrahman Fawzy"
+                            src="../../../assets/uploads/<%= instructor.avatar %>"
+                            style="height: 125px; width:125px; border-radius: 50%; border: 1px solid black"
+                            alt="avatar" />
+                    </div>
+                    <div class="instructorName mt-2">
+                        <h5><%= instructor.fullname %></span></h5>
+                    </div>
+                    <div class="instructorBio" style="border-bottom: 1px solid #DDD">
+                        <p style="font-size: 15px"><%= instructor.bio %></p>
+                    </div>
+                    <div class="feedback mt-2">
+                        <h5>Give Feedback now</h5>
+                    </div>
+                    <form class="feedback" id="feedback" method="POST"
+                        action="/user/profile/reviews/<%= instructor._id %>" style="position: relative;">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
+                            </div>
+                            <textarea maxlength="255" style="height: 175px; resize: none; font-size: 15px"
+                                placeholder="Give feedback composed from 255 chars" id="txtArea" name="feedback"
+                                class="form-control"></textarea>
+                        </div>
+                        <div id="starSystem" style="position: absolute; bottom: 8px; right: 100px;"></div>
+                        <button type="submit" class="btn btn-warning btn-sm"
+                            style="position: absolute; bottom: 8px; right: 10px;">Feedback</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-xl-7 col-lg-7 col-md-6 mt-md-0">
+                <div class="h-100 reivewsContainer d-flex flex-column justify-content-between">
+                    <% if(pageCount === 0) { %>
+                    <div class="h-100 text-light d-flex justify-content-center align-items-center flex-column"
+                        style=" background-color: #10253e">
+                        <div class="image text-center">
+                            <img src="../../../assets/images/star.png" style="height: 200px; width: 200px" />
+                        </div>
+                        <h2>Be the first user to give feedback</h2>
+                        <p class="text-center">In this time, there are no reviews and stars for this instructor. Try to
+                            be the first user to give feedback for this instructor</p>
+                    </div>
+                    <% } else { %>
+                    <div class="reviewsContent"></div>
+                    <div id="reviews" class="d-flex justify-content-center"></div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Separator here -->
+    <div class="container">
+        <hr>
+    </div>
+    <!-- Separator here -->
+
+    <!-- Second Section for all courses that the instructor deals with -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-warning text-center">
+                    <h3 class="m-0">Here are the courses that the instructor gives</h3>
+                </div>
+            </div>
+        </div>
+        <% courses.forEach((course) => { %>
+        <div class="row mb-3">
+            <div class="col-xl-5 col-lg-5 col-md-6">
+                <div class="content bg-white shadow p-3 rounded-lg text-center" style="color: #2f2f2f">
+                    <div class="instructorImage">
+                        <img class="shadow" title="Abdulrahman Fawzy"
+                            src="../../../assets/centerphotos/<%= course.centerphoto %>"
+                            style="height: 125px; width:125px; border-radius: 50%; border: 1px solid black"
+                            alt="avatar" />
+                    </div>
+                    <div class="instructorName mt-2">
+                        <h5><%= course.coursename %></span></h5>
+                    </div>
+                    <div class="instructorBio" style="border-bottom: 1px solid #DDD">
+                        <p style="font-size: 15px"><%= course.coursebio %></p>
+                    </div>
+                    <div class="feedback mt-2">
+                        <h5>Give Feedback now</h5>
+                    </div>
+                    <form class="feedback" id="feedback" method="POST"
+                        action="/user/profile/reviews/<%= instructor._id %>" style="position: relative;">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
+                            </div>
+                            <textarea maxlength="255" style="height: 175px; resize: none; font-size: 15px"
+                                placeholder="Give feedback composed from 255 chars" id="txtArea" name="feedback"
+                                class="form-control"></textarea>
+                        </div>
+                        <div id="starSystem" style="position: absolute; bottom: 8px; right: 100px;"></div>
+                        <button type="submit" class="btn btn-warning btn-sm"
+                            style="position: absolute; bottom: 8px; right: 10px;">Feedback</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-xl-7 col-lg-7 col-md-6 mt-md-0"></div>
+        </div>
+        <% }) %>
+    </div>
+    
+    <script src="https://kit.fontawesome.com/8c190c8b3a.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.4.2/handlebars.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js "
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo "
+        crossorigin="anonymous "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js "
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 "
+        crossorigin="anonymous "></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js "
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM "
+        crossorigin="anonymous "></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            // Suggestion Engine => Bloodhound
+            let engine = new Bloodhound({
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('fullname'),
+                remote: {
+                    url: '/user/profile/search?key=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+
+            let engineDefaults = (key, sync, async) => {
+                if (key === '') {
+                    sync(engine.all());
+                    async([]);
+                }
+                else engine.search(key, sync, async)
+            }
+
+            $('#demo-input').typeahead({
+                hint: $('.Typeahead-hint'),
+                menu: $('.Typeahead-menu'),
+                highlight: false,
+                minLength: 0,
+                classNames: {
+                    input: 'Typeahead-input',
+                    hint: 'tt-hint',
+                    menu: 'tt-menu',
+                    dataset: 'tt-dataset',
+                    suggestion: 'Typeahead-suggestion',
+                    selectable: 'Typeahead-selectable',
+                    empty: 'is-empty',
+                    open: 'is-open',
+                    cursor: 'is-active',
+                }
+            },
+                {
+                    source: engineDefaults,
+                    name: 'profiles',
+                    display: () => '',
+                    limit: Number.MAX_VALUE,
+                    templates: {
+                        notFound: '<div class="EmptyMessage text-muted" style="background-color: #F2F2F2">There are no courses with this name</div>',
+                        pending: '<div class="EmptyMessage text-muted" style="background-color: #F2F2F2; padding: 5px">Loading...</div>',
+                        header: '<div class="templateHeader text-muted" style="background-color: #F2F2F2; padding: 5px">Results are found</div>',
+                        suggestion: (data) => {
+                            return `
+        
+                                    <a href="/user/profile/course/${data._id}" style="text-decoration: none">
+                                        <div class="ProfileCard u-cf">
+                                            <img class="ProfileCard-avatar" src="../../../assets/centerphotos/${data.centerphoto}">
+                                            <div class="ProfileCard-details">
+                                                <div class="ProfileCard-realName">${data.coursename}</div>
+                                                <div class="ProfileCard-screenName">${data.accountActive === true ? "online" : "offline"}</div>
+                                                <div class="ProfileCard-description">${data.coursebio}</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    `
+                        },
+                        footer: '<div class="templateFooter text-muted" style="background-color: #F2F2F2; padding: 5px"> Enjoy with Teacherou &copy;</div>'
+                    },
+
+                }).on('typeahead:asyncrequest', function () {
+                    $('.Typeahead-spinner').show();
+                }).on('typeahead:asynccancel typeahead:asyncreceive', function () {
+                    $('.Typeahead-spinner').hide();
+                });
+        });        
+    </script>
+    <script src="../../../assets/js/emotion-ratings.js"></script>
+    <script src="../../../assets/js/jquery.simplePagination.js"></script>
+    <script>
+        $.ajax({
+            url: "/user/profile/reviews/<%= instructor._id %>/process?pageNo=1",
+            type: "GET",
+            dataType: "json",
+            success: (data) => {
+                $.each(data, (index, val) => {
+                    $(".reviewsContent").append(`
+                                <div class="bg-white shadow-sm p-2 d-flex justify-content-between mb-3 rounded-lg">
+                        <div class="left-content-for-image">
+                            <img src="../../../assets/uploads/${val.userID.avatar}" title="Course Center"
+                                alt="Course Center"
+                                style="height: 30px; width: 30px; border-radius: 50%; border: 1px solid #888" />
+                        </div>
+                        <div class="right-content-for-coursebio pl-2" style="width: calc(100% - 30px)">
+                            <div>
+                                <span>${val.userID.fullname}</span>
+                                ${Array(val.stars).fill().map((item, i) => `
+                                    <span class="icon text-warning ml-1"><i class="fas fa-star"></i></span>
+                                `).join('')}
+                            </div>
+                            <p class="m-0 text-muted" style="font-size: 14px">${val.comment} <span
+                                    class="forDate"
+                                    style="background-color:transparent; color: #424141; border: 1px solid #929292; border-radius: .25rem; font-size: 75%; padding: .25em .4em">${moment(`${val.myDate}`).fromNow()}</span>
+                            </p>
+                        </div>
+                    </div>
+                                `)
+                })
+            }
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script>
+        $(() => {
+            $('#starSystem').emotionsRating({
+                emotions: ['star'],
+                bgEmotion: "star",
+                count: 5,
+                color: 'red',
+                emotionSize: 40,
+                inputName: "rating",
+            });
+            $("#reviews").pagination({
+                pages: "<%= pageCount %>",
+                cssStyle: 'light-theme',
+                onPageClick: (pageNumber, event) => {
+                    $.ajax({
+                        url: "/user/profile/reviews/<%= instructor._id %>/process?pageNo=" + pageNumber,
+                        type: "GET",
+                        dataType: "json",
+                        success: (data) => {
+                            $(".reviewsContent").empty();
+                            $.each(data, (index, val) => {
+                                $(".reviewsContent").append(`
+                                <div class="bg-white shadow-sm p-2 d-flex justify-content-between mb-3 rounded-lg">
+                        <div class="left-content-for-image">
+                            <img src="../../../assets/uploads/${val.userID.avatar}" title="Course Center"
+                                alt="Course Center"
+                                style="height: 30px; width: 30px; border-radius: 50%; border: 1px solid #888" />
+                        </div>
+                        <div class="right-content-for-coursebio pl-2" style="width: calc(100% - 30px)">
+                            <div>
+                                <span>${val.userID.fullname}</span>
+                                ${Array(val.stars).fill().map((item, i) => `
+                                    <span class="icon text-warning ml-1"><i class="fas fa-star"></i></span>
+                                `).join('')}
+                            </div>
+                            <p class="m-0 text-muted" style="font-size: 14px">${val.comment} <span
+                                    class="forDate"
+                                    style="background-color:transparent; color: #424141; border: 1px solid #929292; border-radius: .25rem; font-size: 75%; padding: .25em .4em">${moment(`${val.myDate}`).fromNow()}</span>
+                            </p>
+                        </div>
+                    </div>
+                                `)
+                            })
+                        }
+                    });
+                }
+            });
+        })
+    </script>
+</body>
+
+</html>

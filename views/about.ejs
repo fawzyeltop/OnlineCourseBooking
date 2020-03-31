@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>About Page</title>
+    <link rel="shortcut icon" type="image/png" href="../assets/images/logo.png" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap" rel="stylesheet">
+</head>
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+    }
+</style>
+
+<body>
+    <%- include('./partials/navbar.ejs') -%>
+    <div class="f-content">
+        <div class="container-fluid p-5 bg-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="left-content">
+                            <h4>What's this website?</h4>
+                            <p> This is a website for helping students or people who want to take courses at any field.
+                                The website will help you to find the best course for you because it provides a detailed
+                                information about the course content and the instructor of that course.
+                                The user of this website can book the course online using "vodafone cash" or "credit
+                                card", then the instructor will contact with him.</p>
+                        </div>
+                        <div class="left-content">
+                            <h3>Who are we?</h3>
+                            <p class="incontent">
+                                We are some some students who want to facilitate finding the appropriate course for
+                                students and connect between instructor and student.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="right-content-image">
+                            <img class="img-fluid" src="../assets/images/ima.jpg" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('./partials/footer.ejs') -%>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+</body>
+
+</html>

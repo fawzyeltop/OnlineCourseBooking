@@ -1,0 +1,40 @@
+html,body {
+    width: 100%;
+    height: auto;
+    background-color: #F2F2F2;
+    font-family: 'fontAwesome', sans-serif;
+}
+.nav-tabs {
+    border: none;
+    background-color: #FFFF;
+    box-shadow: 0 0 5px #DDD;
+    border-radius: 4px;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    padding: 0.8rem 0.8rem;
+    color: #888;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #5d72da;
+    color: #F2F2F2;
+}
+
+.form-control, select, textarea {
+    height: 50px;
+}
+
+hr {
+    border-top: 0;
+    border: 2px dashed #cecece;
+    margin: 0;
+    margin-top: 2rem;
+}
+
+.show-notifications #icon-bell {
+    fill: #7f8c8d;
+}

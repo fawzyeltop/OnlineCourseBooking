@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="../assets/images/logo.png" />
+    <link rel="stylesheet" href="../assets/css/typeahead.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap" rel="stylesheet">
+    <link href="../assets/css/lightbox.css" rel="stylesheet" />
+    <link href="//vjs.zencdn.net/7.3.0/video-js.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../assets/css/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="../assets/css/slick-theme.css"/>
+    <link href="//vjs.zencdn.net/7.3.0/video-js.min.css" rel="stylesheet">
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+
+    <!-- Katex CSS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha1/katex.min.css"
+        integrity="sha384-8QOKbPtTFvh/lMY0qPVbXj9hDh+v8US0pD//FcoYFst2lCIf0BmT58+Heqj0IGyx" crossorigin="anonymous">
+
+    <!-- qlSnow CSS-->
+    <link href="../../assets/css/qlSnow.css" rel="stylesheet">
+
+    <!-- mathquill CSS-->
+    <link href="../../assets/css/mathquill.css" rel="stylesheet">
+
+    <!-- mathquill4quill CSS-->
+    <link href="../../assets/css/mathquill4quill.min.css" rel="stylesheet">
+    <title>
+        <%= user.fullname %>
+    </title>
+    <style>
+
+        .row .speN:first-child {
+            margin-top: 0 !important;
+        }
+        .modal-dialog {
+            max-width: 700px !important;
+        }
+        .ql-editor {
+            height: auto;
+            padding: 0;
+            min-height: 0;
+            max-height: none;
+            overflow-y: visible;
+        }
+    </style>
+</head>
+<body>
+    <%- include('./partials/navbar.ejs') -%>
+    <div class="container-fluid py-3" style="background-color: #3a4352">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="f-content text-white">
+                        <h5 class="m-0"><strong>The Course <%= course.coursename %> is teached by <%= course.instructorID.fullname %></strong></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid py-5" style="background-color: #29303B">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="content text-white">
+                        <h3>Course named as <%= course.coursename %></h3>
+                        <p style="font-size: 20px">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque ratione fuga aliquid esse nobis mollitia veniam dolorum, quas corrupti earum, hic error laborum, quis necessitatibus unde illum fugiat? Dolor, quia. Lorem</p>
+                        <div class="d-flex">
+                            <span class="courseprice badge badge-warning p-2 d-flex align-items-center">Course Price is <%= course.courseprice %>$</span>
+                            <span class="users badge badge-warning p-2 d-flex align-items-center ml-3">Enrolled Users is <%= course.users.length %></span>
+                            <span class="courselimited badge badge-warning p-2 d-flex align-items-center ml-3">Course limited is <%= course.courselimited %></span>
+                        </div>
+                        <div class="d-flex mt-3">
+                            <span class="courseprice badge badge-danger p-2 d-flex align-items-center">Center Address is <%= course.centerplace %></span>
+                            <span class="users badge badge-danger p-2 d-flex align-items-center ml-3">Course Start is <%= moment(course.coursestart).format('DD-MMM-YYYY') %></span>
+                            <span class="users badge badge-danger p-2 d-flex align-items-center ml-3">Course End is <%= moment(course.courseend).format('DD-MMM-YYYY')  %></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" style="position: relative;">
+                    <div class="content bg-white rounded-lg shadow-sm" style="position: absolute; width: 100%;">
+                        <div class="sectionForVideo w-100">
+                                <video id="my-video" class="video-js" controls preload="auto"
+                              height="264" data-setup="{}" style="max-width: 100%">
+                                <source src="../assets/coursevideos/<%= course.coursevideo %>"
+                                    type="video/mp4" />
+                                <p class="vjs-no-js">
+                                    To view this video please enable JavaScript, and consider
+                                    upgrading to a
+                                    web browser that
+                                    <a href="https://videojs.com/html5-video-support/"
+                                        target="_blank">supports HTML5 video</a>
+                                </p>
+                            </video>
+                        </div>
+                        <div class="sectionForPrice text-center">
+                            <h3><strong>Course Price <%= course.courseprice %>$</strong></h3>
+                            <input class="ml-2" style="outline: none; max-width: 100% " type="image" onclick='FawryPay.checkout({  "language":"en-gb", "merchantCode":"SHKKRxuqZ5Y=", "merchantRefNumber":"<%= course._id  %>", "customer":{ "name":"<%= user.fullname %>", "mobile":"<%= user.phone %>", "email":"<%= user.email %>", "customerProfileId":"<%= user._id %>" }, "order":{ "description":"<%= course.coursename %>", "expiry":"24", "orderItems":[ { "productSKU":"12222", "description":"<%= course.coursename %>", "price":"<%= course.courseprice * 20 %>", "quantity":"1" } ] }},"http://localhost:3000/user/profile/getVal", "http://localhost:3000/user/profile/getVal")' src="https://www.atfawry.com/assets/img/FawryPayLogo.jpg"/>  
+                        </div>
+                        <div class="sectionForCourseContent">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item bg-light"><h6>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</h6></li>
+                                <li class="list-group-item bg-light"><h6>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</h6></li>
+                                <li class="list-group-item bg-light"><h6>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</h6></li>
+                              </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                        <div class="f-content bg-white p-3 shadow rounded-lg">
+                                <h2><strong><span>About the instructor</span></strong></h2>
+                                <div class="d-flex justify-content-between mt-3">
+                                    <div class="left-content text-center" style="width: 250px">
+                                        <div class="forImage">
+                                            <img class="shadow" style="height: 150px; width: 150px; border-radius: 100%; border: 2px solid #888" src="../assets/uploads/<%= course.instructorID.avatar %>"/>
+                                        </div>
+                                        <div class="forFullname mt-1 text-center">
+                                            <h5><strong><%= course.instructorID.fullname %></strong></h5>
+                                        </div>
+                                        <div class="forLocation mt-1">
+                                            <span style="display: block; padding: 7px 15px; background-color:#ceebfd; border: 1px solid #81c8f5; color: #36779e; font-size: 14px; border-radius: 4px">Location is <%= course.instructorID.location %> <i class="far fa-compass" aria-hidden="true"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="right-content pl-2" style="width: calc(100% - 250px)">
+                                        <div class="forBio">
+                                            <p class="lead"><%= course.instructorID.bio %></p>
+                                        </div>
+                                        <hr style="margin-top: 0">
+                                        <div class="forInquries mt-2">
+                                            <ul class="list-group">
+                                                <li class="list-group-item"><i class="fas fa-male text-info mx-2"></i>Phone number <%= course.instructorID.phone %></li>
+                                                <li class="list-group-item"><i class="fas fa-venus text-warning mx-2"></i>Email <%= course.instructorID.email %></li>
+                                                <li class="list-group-item"><i class="fas fa-gavel text-danger mx-2"></i> Facebook Username <%= course.instructorID.username %></li>
+                                            </ul>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="f-content mt-3  bg-white p-3 shadow rounded-lg">
+                                <h2><strong><span>About the Center Place</span></strong></h2>
+                                <div class="d-flex">
+                                    <div class="forImage">
+                                        <img style="width: 250px; height: 200px" src="../assets/centerphotos/<%= course.centerphoto %>"/>
+                                    </div>
+                                    <div class="bg-light forContent d-flex align-items-center pl-2" style="width: calc(100% - 250px)">
+                                           <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam rem facere, ducimus dignissimos eligendi nihil temporibus sequi sed! Minus, nesciunt assumenda. Corrupti, distinctio unde repellendus alias enim molestiae itaque obcaecati?</p>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="f-content mt-3  bg-white p-3 shadow rounded-lg">
+                            <h2><strong><span>About the Course Content</span></strong></h2>
+                            <div class="d-flex">
+                                <div class="forImage d-flex align-items-center">
+                                    <img style="width: 250px; height: 200px" src="../assets/images/forContact.png"/>
+                                </div>
+                                <div class="bg-light forContent d-flex align-items-center pl-2" style="width: calc(100% - 250px)">
+                                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut, amet soluta sequi omnis inventore placeat repellendus odio vitae officia nihil, explicabo quaerat ipsum repellat est ex minus, quos dignissimos? Ut.</p>
+                                     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#courseContent">
+                                        <span class="word">Content</span>
+                                        <span class="icon"><i class="fas fa-pen-nib"></i></span>
+                                      </button>
+                                      <!-- Modal -->
+                                        <div class="modal fade" id="courseContent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel"><%= course.coursename %> Course Content</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="ql-snow">
+                                                        <div class="ql-editor">
+                                                            <%- course.coursebio %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="f-content mt-3  bg-white p-3 shadow rounded-lg">
+                        <h2><strong><span>Give Feedback to this Course</span></strong></h2>
+                        <form class="feedback" id="feedback" method="POST"
+                        action="/user/profile/reviews/65454" style="position: relative;">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
+                            </div>
+                            <textarea maxlength="255" style="height: 175px; resize: none; font-size: 15px"
+                                placeholder="Give feedback composed from 255 chars" id="txtArea" name="feedback"
+                                class="form-control"></textarea>
+                        </div>
+                        <div id="starSystem" style="position: absolute; bottom: 8px; right: 100px;"></div>
+                        <button type="submit" class="btn btn-warning btn-sm"
+                            style="position: absolute; bottom: 8px; right: 10px;">Feedback</button>
+                    </form>
+                    <h5><strong><span>All made reviews by users that have experience with this course</span></strong></h5>   <hr style="margin-top: 0"><hr style="margin-top: 0; border: 1px dashed #cecece">
+                </div>   
+
+            </div>
+        </div>
+    </div>
+    <div id="flashMessage" class="alert alert-success alert-dismissible fade show" role="alert" style="width: 275px; font-size: 14px; position: fixed; display: none; left: 15px; bottom: 15px; z-index: 555">
+    </div>
+    <script src="https://kit.fontawesome.com/8c190c8b3a.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.4.2/handlebars.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js "
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo "
+        crossorigin="anonymous "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js "
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 "
+        crossorigin="anonymous "></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js "
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM "
+        crossorigin="anonymous "></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
+    <script src="../assets/js/searchEngine.js"></script>
+    <script src="//vjs.zencdn.net/7.3.0/video.min.js"></script>
+    <script src="https://www.atfawry.com/ECommercePlugin/scripts/FawryPay.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Readmore.js/2.2.0/readmore.js"></script>
+    <script src="../../../assets/js/emotion-ratings.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script>
+        $(() => {
+            $('#starSystem').emotionsRating({
+                emotions: ['star'],
+                bgEmotion: "star",
+                count: 5,
+                color: 'red',
+                emotionSize: 40,
+                inputName: "rating",
+            });
+        })
+    </script>
+    <!-- 
+    <script>
+        $(() => {
+            $('#courseContent').readmore({
+                speed: 100,
+                collapsedHeight: 100,
+                heightMargin: 16,
+                moreLink: '<a href="#">Read more</a>',
+                lessLink: '<a href="#">Close</a>'
+            });
+        })
+    </script>
+    -->
+    <script>
+        $(() => {
+            var socket = io()
+            socket.emit("join", "<%= user.id %>");
+            socket.on("courseData", data => {  
+                $("#flashMessage").html(`
+                <audio autoplay class="d-none">
+                    <source src="../assets/sounds/notification.mp3" type="audio/mpeg">
+                </audio>
+                <strong>Important Notification!</strong><br> ${data.coursename} Course is created now. You can visit the course link on <a target="_blank" href="/course/${data.courseID}">Visit</a> </span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                `).fadeIn(250).delay(5000).fadeOut(250);
+             })
+            
+        })
+    </script>
+</body>
+</html>

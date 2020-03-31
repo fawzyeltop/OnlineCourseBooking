@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/main.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/png" href="../assets/images/logo.png" />
+    <link rel="stylesheet" href="../assets/css/typeahead.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap" rel="stylesheet">
+    <link href="../assets/css/lightbox.css" rel="stylesheet" />
+    <link href="https://unpkg.com/video.js@7/dist/video-js.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/@videojs/themes@1/dist/forest/index.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../assets/css/slick.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/slick-theme.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/introjs.min.css  " />
+    <link rel="stylesheet" type="text/css" href="../assets/css/amsify.suggestags.css" />
+    <title>
+        <%= user.fullname %>
+    </title>
+</head>
+
+<body style="position: relative">
+    <button title="Learn me how this page works?" class="learnMe" id="learnMe"
+        style="background-color: #FFF; border-radius: 50%; height: 50px; width: 50px; line-height: 50px; outline: none; border: none; font-size: 30px; box-shadow: 0 0 25px #c5c5c5; color: #555; text-align: center; position: fixed; bottom: 15px; right: 20px; z-index: 5;"><i
+            class="fas fa-globe-europe"></i></button>
+    <%- include('./partials/navbar.ejs') -%>
+
+    <div class="container mt-4">
+        <%- include('./partials/flashMessages.ejs') -%>
+        <%- include('./partials/errors.ejs') -%>
+        <% if(user.accountVerified === false) { %>
+        <div class="message alert alert-danger">
+
+            <p class="d-inline">Your Email: <strong><%= user.email %></strong> <span>is not verified,</span> <span>We
+                    have sent a message
+                    to your email</span></p>
+            <form class="resend d-inline" id="resend" method="post" action="/user/profile">
+                <button type="submit" class="btn btn-danger btn-sm">Resend</button>
+            </form>
+
+        </div>
+        <% } %>
+        <div class="row">
+            <div class="col-xl-4 col-lg-4 col-md-6 text-center" data-position="right" data-step="1"
+                data-intro="This is your profile pic, fullname, role, bio and facebook social link. You can uplaod your pic from this place.">
+                <div class="content bg-white shadow-sm p-3 rounded-lg border" style="color: #2f2f2f">
+                    <a href="../assets/uploads/<%= user.avatar %>" data-lightbox="personalImage"
+                        data-title="This photo is related to <%= user.fullname %>">
+                        <img class="shadow" title="<%= user.fullname %>" src="../assets/uploads/<%= user.avatar %>"
+                            style="height: 125px; width:125px; border-radius: 50%; border: 1px solid black"
+                            alt="avatar" />
+                    </a>
+                    <div class="fullname">
+                        <p class="mt-2 mb-0">
+                            <%= user.fullname %> <span class="badge badge-info"><%= user.role %></span>
+                        </p>
+                        <p class="about mt-2 mb-0" style="font-size: 15px; line-height: 1.7">
+                            <%= user.bio %>
+                        </p>
+                        <p class="about mt-2 mb-0" style="font-size: 15px; line-height: 1.7">
+                            I'm found on <a href="https://www.facebook.com/<%= user.username %>" target="_blank"
+                                class="btn btn-outline-primary btn-sm">Facebook <i class="fab fa-facebook-f"></i></a>
+                        </p>
+                    </div>
+                    <form class="mt-3" action="/user/upload" method="post" enctype="multipart/form-data">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <button type="submit" class="btn btn-primary btn-sm">Upload</button>
+                            </div>
+                            <div class="custom-file">
+                                <input type="file" name="avatar" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label text-left" for="customFile">Choose file</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-xl-8 col-lg-8 col-md-6 mt-md-0 mt-3" data-position="left" data-step="2"
+                data-intro="Here are Info about you and you can edit your info, change your password and delete your account">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a href="" data-target="#profile" data-toggle="tab" class="nav-link active"><span>
+                                Profile</span> <i class="far fa-user"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" data-target="#edit" data-toggle="tab" class="nav-link"><span>Info</span> <i
+                                class="far fa-edit"></i></a>
+                    </li>
+                    <% if(user.fromStatus !== "facebook") { %>
+                    <li class="nav-item">
+                        <a href="" data-target="#changePassword" data-toggle="tab" class="nav-link"><span>
+                                Password</span> <i class="fas fa-key"></i></a>
+                    </li>
+                    <% } %>
+                    <li class="nav-item">
+                        <a href="" data-target="#changeRole" data-toggle="tab" class="nav-link"><span>
+                                Role</span> <i class="fas fa-dice-d20"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" data-target="#removeAccount" data-toggle="tab" class="nav-link"><span>
+                                Account</span> <i class="far fa-trash-alt"></i></a>
+                    </li>
+                </ul>
+                <div class="tab-content mt-3">
+                    <div class="tab-pane fade show active" id="profile">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>User Profile for <span><%= user.fullname %></span> <i class="far fa-user"></i>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-12">
+                                    <h6>About</h6>
+                                    <p>
+                                        <%= user.bio %>
+                                    </p>
+                                    <h6>Phone number</h6>
+                                    <p class=bad>
+                                        <%= user.phone %>
+                                    </p>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-12">
+                                    <% if(user.role === "Instructor") { %>
+                                    <h6>Instructor Dashboard</h6>
+                                    <p>Your can visit your special dashboard to make course and publish it</p>
+                                    <a class="btn btn-info btn-sm" href="/user/profile/dashboard">Dashboard</a>
+                                    <% } else { %>
+                                    <div class="here">
+                                        <h6>Recent Tags</h6>
+                                        <% user.tags.forEach((tag) => { %>
+                                        <a href="javascript:void()" style="cursor:default;"
+                                            class="tag tag-default tag-pill"><%= tag %></a>
+                                        <% })  %>
+                                    </div>
+                                    <div class="myDiv mt-2"><span class="tag tag-primary"><i class="far fa-compass"></i>
+                                            <%= user.location %></span>
+                                        <span class="tag tag-success"><i class="fas fa-mars-stroke"></i>
+                                            <%= user.gender %></span>
+                                        <span class="tag tag-danger"><i class="fab fa-facebook-f"></i>
+                                            <%= user.username %></span></div>
+                                    <% } %>
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p class="p-2 shadow-sm rounded-lg"
+                                        style="background-color: #a9ffbb;border: 1px solid #6bf387"><span
+                                            class="fa fa-clock-o ion-clock pull-xs-right"></span> <%= user.bio %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--/row-->
+                    </div>
+                    <div class="tab-pane fade" id="edit">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>
+                                        <span>Edit Profile Info</span>
+                                        <span><i class="far fa-edit"></i></span>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <form class="container-fluid" role="form" method="POST" id="form" action="/user/profile/edit">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-user"></i></span>
+                                        </div>
+                                        <input placeholder="Enter your fullname correctly" class="form-control"
+                                            name="fullname" type="text" value="<%= user.fullname %>">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                        </div>
+                                        <input placeholder="Enter your email correctly" class="form-control"
+                                            name="email" type="email" value="<%= user.email %>">
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-pen-nib"></i></span>
+                                        </div>
+                                        <textarea style="height: 100px; resize: none" placeholder="Enter your bio"
+                                            id="txtArea" name="bio" class="form-control"><%= user.bio %></textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-compass"></i></span>
+                                        </div>
+
+
+                                        <select name="location" class="custom-select">
+                                            <option value="Alexandria"
+                                                <%= user.location === 'Alexandria'? 'selected': '' %>>Alexandria
+                                            </option>
+                                            <option value="Aswan" <%= user.location === 'Aswan'? 'selected': '' %>>Aswan
+                                            </option>
+                                            <option value="Asyut" <%= user.location === 'Asyut'? 'selected': '' %>>Asyut
+                                            </option>
+                                            <option value="Beheira" <%= user.location === 'Beheira'? 'selected': '' %>>
+                                                Beheira</option>
+                                            <option value="Beni Suef"
+                                                <%= user.location === 'Beni Suef'? 'selected': '' %>>Beni Suef</option>
+                                            <option value="Cairo" <%= user.location === 'Cairo'? 'selected': '' %>>Cairo
+                                            </option>
+                                            <option value="Dakahlia"
+                                                <%= user.location === 'Dakahlia'? 'selected': '' %>>Dakahlia</option>
+                                            <option value="Damietta"
+                                                <%= user.location === 'Damietta'? 'selected': '' %>>Damietta</option>
+                                            <option value="Faiyum" <%= user.location === 'Faiyum'? 'selected': '' %>>
+                                                Faiyum</option>
+                                            <option value="Gharbia" <%= user.location === 'Gharbia'? 'selected': '' %>>
+                                                Gharbia</option>
+                                            <option value="Giza" <%= user.location === 'Giza'? 'selected': '' %>>Giza
+                                            </option>
+                                            <option value="Ismailia"
+                                                <%= user.location === 'Ismailia'? 'selected': '' %>>Ismailia</option>
+                                            <option value="Kafr El Sheikh"
+                                                <%= user.location === 'Kafr El Sheikh'? 'selected': '' %>>Kafr El Sheikh
+                                            </option>
+                                            <option value="Luxor" <%= user.location === 'Luxor'? 'selected': '' %>>Luxor
+                                            </option>
+                                            <option value="Matruh" <%= user.location === 'Matruh'? 'selected': '' %>>
+                                                Matruh</option>
+                                            <option value="Minya" <%= user.location === 'Minya'? 'selected': '' %>>Minya
+                                            </option>
+                                            <option value="Monufia" <%= user.location === 'Monufia'? 'selected': '' %>>
+                                                Monufia</option>
+                                            <option value="New Valley"
+                                                <%= user.location === 'New Valley'? 'selected': '' %>>New Valley
+                                            </option>
+                                            <option value="North Sinai"
+                                                <%= user.location === 'North Sinai'? 'selected': '' %>>North Sinai
+                                            </option>
+                                            <option value="Port Said"
+                                                <%= user.location === 'Port Said'? 'selected': '' %>>Port Said</option>
+                                            <option value="Qalyubia"
+                                                <%= user.location === 'Qalyubia'? 'selected': '' %>>Qalyubia</option>
+                                            <option value="Qena" <%= user.location === 'Qena'? 'selected': '' %>>Qena
+                                            </option>
+                                            <option value="Red Sea" <%= user.location === 'Red Sea'? 'selected': '' %>>
+                                                Red Sea</option>
+                                            <option value="Sharqia" <%= user.location === 'Sharqia'? 'selected': '' %>>
+                                                Sharqia</option>
+                                            <option value="Sohag" <%= user.location === 'Sohag'? 'selected': '' %>>Sohag
+                                            </option>
+                                            <option value="South Sinai"
+                                                <%= user.location === 'South Sinai'? 'selected': '' %>>South Sinai
+                                            </option>
+                                            <option value="Suez" <%= user.location === 'Suez'? 'selected': '' %>>Suez
+                                            </option>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="inputGroupSelect02">Options</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-mars-stroke"></i></span>
+                                        </div>
+
+
+                                        <select class="custom-select" name="gender">
+                                            <option value="Male" <%= user.gender === 'Male'? 'selected': '' %>>Male
+                                            </option>
+                                            <option value="Female" <%= user.gender === 'Female'? 'selected': '' %>>
+                                                Female
+                                            </option>
+                                            <option value="Unknown" <%= user.gender === 'Unknown'? 'selected': '' %>>
+                                                Unknown
+                                            </option>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="inputGroupSelect02">Options</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        </div>
+                                        <input placeholder="Enter your phonenumber correctly" class="form-control"
+                                            name="phone" type="text" value="<%= user.phone %>">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fab fa-facebook-f"></i></span>
+                                        </div>
+                                        <input placeholder="Enter your facebook username" class="form-control"
+                                            type="text" name="username" value="<%= user.username%>">
+                                    </div>
+                                </div>
+                            </div>
+                            <% if(user.role === "User") {  %>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-tags"></i></span>
+                                        </div>
+                                        <input class="form-control" type="text" name="tags" value="<%= user.tags %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary">
+                                        <span>Save Changes</span>
+                                        <span><i class="far fa-edit"></i></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <% if(user.fromStatus !== "facebook") { %>
+                    <div class="tab-pane fade" id="changePassword">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>Change your old password <i class="fas fa-key"></i></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <form class="container-fluid" role="form" method="POST" id="form" action="/user/profile/change">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                        </div>
+                                        <input required placeholder="Enter your old password" class="form-control"
+                                            name="oldPassword" type="password">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                        </div>
+                                        <input required placeholder="Enter your new password" class="form-control"
+                                            name="newPassword" type="password">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                        </div>
+                                        <input required placeholder="Confirm your new password" class="form-control"
+                                            name="confirmPassword" type="password">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary">Change Password <i
+                                            class="fas fa-key"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <% } %>
+                    <div class="tab-pane fade" id="changeRole">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>Change your Role <i class="fas fa-dice-d20"></i></h4>
+                                    <p>After changing your Role to User, You will be able visit the pages that are related to User and book the course you want. Don't be affraid, You will be able to change your Role to Instructor again in the time you like.</p>
+                                    <div class="d-flex">
+                                        <form class="changeRoleToUser" id="changeRoleToUser" method="POST" action="/user/profile/changeRoleToUser">
+                                            <button type="submit" class="btn btn-lg btn-success">Change Role to User <i class="far fa-user"></i> </button>
+                                        </form>
+                                        <form class="changeRoleToInstructor ml-2" id="changeRoleToInstructor" method="POST" action="/user/profile/changeRoleToInstructor">
+                                            <button type="submit" class="btn btn-lg btn-primary">Change Role to Instructor <i class="fas fa-chalkboard-teacher"></i></button>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="removeAccount">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>Remove your account <i class="far fa-trash-alt"></i></h4>
+                                    <p>After clicking on the Remove Account button, we won't ask you "Are your sure to
+                                        delete your account?" and your account will be deleted immediately and you
+                                        cannot retrieve it again.</p>
+                                    <form class="form" role="form" method="POST" id="form"
+                                        action="/user/profile/removeAccount">
+                                        <button type="submit" class="btn btn-danger"><span>Remove Account</span> <i
+                                                class="far fa-trash-alt"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr>
+
+    </div>
+
+
+    <div class="container py-4">
+        <h2 class="text-center">Welcome <%= user.fullname %>, Here are your <strong>interestings</strong></span></h2>
+        <p class="lead text-center">Based on your interestings, We select twenty random courses for you and then you can visit the course you want and view all the reviews for this course before buying it by FawryPay Payment</p>
+        <div style="width: 50%; margin: auto; border: 1px solid orangered"></div>
+        <div class="row">
+            <div class="col-12" data-position="top" data-step="3"
+                data-intro="Here are all the users from all Governorates of Egypt">
+                <div class="instructorSection mt-3" id="instructorSection">
+                    <h2 class="text-muted" style="text-align: center;"><strong>Selected <%= users.length %> Random Users
+                            from all Governorates of Egypt</strong>
+                    </h2>
+                    <div class="course mt-2">
+                        <% users.forEach((user) => { %>
+                        <div class="px-2">
+                            <div class="shadow-sm rounded-lg bg-white">
+                                <div class="forCenterPhoto d-flex justify-content-center w-100 border">
+                                    <img class="max-width: 100%" src="../assets/uploads/<%= user.avatar %>"
+                                        style="height: 175px; width: 100%" />
+                                </div>
+                                <div class="forCoursename text-center mt-2">
+                                    <h6><strong><%= user.fullname.split(' ').slice(0, 2).join(' ')  %></strong></h6>
+                                </div>
+                                <p class="text-center text-muted px-1 mb-1" style="font-size: 12px">
+                                    <%= user.bio.split(' ').slice(0, 25).join(' ') %>...</p>
+                                <div class="someInfoForInstructor d-flex justify-content-center px-1 pb-2">
+                                    <span
+                                        style="display: block; padding: 5px 7px; background-color:#ceebfd; border: 1px solid #81c8f5; color: #36779e; font-size: 14px; border-radius: 4px">Location
+                                        is <%= user.location %> <i class="far fa-compass" aria-hidden="true"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12" data-position="top" data-step="4"
+                data-intro="Here are all the instructors from all Governorates of Egypt">
+                <div class="instructorSection mt-3" id="instructorSection">
+                    <h2 class="text-muted" style="text-align: center;"><strong>Selected <%= instructors.length %> Random
+                            Instructors from all Governorates of Egypt</strong>
+                    </h2>
+                    <div class="course mt-3">
+                        <% instructors.forEach((instructor) => { %>
+                        <div class="px-2">
+                            <div class="shadow-sm rounded-lg bg-white">
+                                <div class="forCenterPhoto d-flex justify-content-center w-100 border">
+                                    <img class="max-width: 100%" src="../assets/uploads/<%= instructor.avatar %>"
+                                        style="height: 175px; width: 100%" />
+                                </div>
+                                <div class="forCoursename text-center mt-2">
+                                    <h6><strong><%= instructor.fullname.split(' ').slice(0, 2).join(' ')  %></strong>
+                                    </h6>
+                                </div>
+                                <p class="text-center text-muted px-1 mb-1" style="font-size: 12px">
+                                    <%= instructor.bio.split(' ').slice(0, 25).join(' ') %>...</p>
+                                <div class="someInfoForInstructor d-flex justify-content-center px-1 pb-2">
+                                    <span
+                                        style="display: block; padding: 5px 7px; background-color:#ceebfd; border: 1px solid #81c8f5; color: #36779e; font-size: 14px; border-radius: 4px">Location
+                                        is <%= instructor.location %> <i class="far fa-compass"
+                                            aria-hidden="true"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12" data-position="top" data-step="5"
+                data-intro="Here are all the created courses made by instructors">
+                <div class="instructorSection mt-3" id="instructorSection">
+                    <h2 class="text-muted" style="text-align: center;"><strong>Selected <%= coursesForShow.length %>
+                            Random Courses based on your interestings</strong>
+                    </h2>
+                    <div class="course mt-3">
+                        <% coursesForShow.forEach((course) => { %>
+                        <div class="px-1">
+                            <div class="shadow-sm rounded-lg bg-white">
+                                <div class="forCenterPhoto d-flex justify-content-center w-100 border">
+                                    <img class="max-width: 100%" src="../assets/centerphotos/<%= course.centerphoto %>"
+                                        style="height: 175px; width: 100%" />
+                                </div>
+                                <div class="forCoursename text-center mt-2">
+                                    <h6><strong><%= course.coursename %> Course</strong></h6>
+                                </div>
+                                <p class="text-center text-muted px-1" style="font-size: 13px">
+                                    <%= course.coursebio.split(' ').slice(0, 25).join(' ')  %>...</p>
+                                <div class="someInfoForCourse d-flex justify-content-center px-1 pb-2">
+                                    <span
+                                        style="display: block; padding: 5px 15px; background-color:#cffdce; border: 1px solid #76f773; color: #4f884d; font-size: 14px; border-radius: 4px"><%= course.courseprice %>
+                                        <i class="fas fa-dollar-sign"></i></span>
+                                    <% if(course.courselimited == course.users.length) { %>
+                                    <span class="ml-1"
+                                        style="display: block; padding: 5px 15px; background-color:#fdcece; border: 1px solid #e29191; color: #bf5c5c; font-size: 14px; border-radius: 4px"><i
+                                            class="fas fa-times"></i></span>
+
+                                    <% } else { %>
+                                    <span class="ml-1"
+                                        style="display: block; padding: 5px 15px; background-color:#ceebfd; border: 1px solid #81c8f5; color: #36779e; font-size: 14px; border-radius: 4px"><i
+                                            class="fas fa-check"></i></span>
+                                    <% }  %>
+                                    <a target="_blank" class="btn btn-outline-info btn-sm ml-1"
+                                        href="/course/<%= course._id %>">View</a>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Nav tabs -->
+        <nav class="d-none">
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+                    aria-controls="nav-home" aria-selected="true">Home</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+                    aria-controls="nav-profile" aria-selected="false">Profile</a>
+                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
+                    aria-controls="nav-contact" aria-selected="false">Contact</a>
+            </div>
+        </nav>
+        <div class="tab-content mt-3" id="nav-tabContent">
+            <div class="container-fluid tab-pane fade show active" id="nav-home" role="tabpanel"
+                aria-labelledby="nav-home-tab">
+                <div class="row mt-3">
+                    <div class="col-12" data-position="top" data-step="6"
+                        data-intro="Search about courses based on name and price">
+                        <div class="p-2 shadow-sm rounded-lg border content" style="background-color: #fff0c6">
+                            <h3>Search about courses based on name and price</h3>
+                            <form class="d-flex myForm" id="myForm" action="/user/profile" method="post">
+                                <div class="input-group w-25">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-burn"></i></span>
+                                    </div>
+                                    <select class="custom-select" name="coursename">
+                                        <option value="all">All
+                                        </option>
+                                        <option value="English">English
+                                        </option>
+                                        <option value="Maths">
+                                            Maths
+                                        </option>
+                                        <option value="Arabic">
+                                            Arabic
+                                        </option>
+                                        <option value="Pro">
+                                            Pro
+                                        </option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <label class="input-group-text" for="inputGroupSelect02">Course</label>
+                                    </div>
+                                </div>
+                                <div class="ml-2 input-group w-25">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                    </div>
+                                    <select class="custom-select" name="courseprice">
+                                        <option value="50">50$
+                                        </option>
+                                        <option value="100">
+                                            100$
+                                        </option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <label class="input-group-text" for="inputGroupSelect02">Price</label>
+                                    </div>
+                                </div>
+                                <button type="submit" class="ml-2 btn btn-warning">
+                                    <span>Search now</span>
+                                    <span><i class="fas fa-search"></i></span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <% if(courseDocs.length === 0) { %>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <div class="alert alert-danger">
+                            <h3>No Results are found here</h3>
+                        </div>
+                    </div>
+                </div>
+                <% } else { %>
+                <%  courseDocs.forEach((Course, globalIndex) => { %>
+                <div class="row mt-3">
+                    <% Course.forEach((course, localIndex) => { %>
+
+                    <div class="speN col-md-6 mt-md-0 mt-3">
+                        <div class="courseContent p-3 shadow bg-white rounded-lg border">
+                            <div class="aboutInstructor d-flex">
+                                <button type="button" class="btn btn-outline-info" data-toggle="modal"
+                                    data-target="#instructorModal<%= ((globalIndex + 1) * 2) + (localIndex + 1) %>">
+                                    <span class="info-word">Instructor Info</span>
+                                    <span class="user-icon"><i class="far fa-user"></i></span>
+                                </button>
+                                <% var count = 0; %>
+                                <% var chargeRequest = { "language":"en-gb", "merchantCode":"SHKKRxuqZ5Y=", "merchantRefNumber":"12333", "customer":{ "name":"Abd", "mobile":"01203522497", "email":"fawzyeltop@yahoo.com", "customerProfileId":"55" }, "order":{ "description":"test bill inq", "expiry":"1", "orderItems":[ { "productSKU":"12222", "description":"Test Product", "price":"1000", "quantity":"1" } ] }, "signature":"243d69d005ba46943c5f8d590cf7f8ad6c02663a838ca5b7039c33e03ad10799"}; var successPageUrl="http://localhost:3000/user/profile"; var failerPageUrl="http://localhost:3000/user/profile"; %>
+                                <% for(var i = 0; i < course.users.length; i++) { %>
+                                <%  if(course.users[i].acceptanceStatus === true) { %>
+                                <%  count++; %>
+                                <% } %>
+                                <% } %>
+                                <% if(course.courselimited === count || moment().isSameOrAfter(course.coursestart)) { %>
+                                <button type="button" class="btn btn-danger ml-2" style="cursor:auto;">Completed <i
+                                        class="far fa-list-alt"></i></button>
+                                <% } else { %>
+                                <button type="button" class="btn btn-outline-success ml-2" data-toggle="modal"
+                                    data-target="#paymentByCash<%= ((globalIndex + 1) * 2) + (localIndex + 1) %>">
+                                    <span class="info-word">Cash Payment</span>
+                                    <span class="user-icon"><i class="far fa-money-bill-alt"></i></span>
+                                </button>
+
+                                <input class="ml-2" style="outline: none" type="image"
+                                    onclick='FawryPay.checkout({  "language":"en-gb", "merchantCode":"SHKKRxuqZ5Y=", "merchantRefNumber":"<%= course._id %>", "customer":{ "name":"<%= user.fullname %>", "mobile":"<%= user.phone %>", "email":"<%= user.email %>", "customerProfileId":"<%= user._id %>" }, "order":{ "description":"<%= course.coursename %> Course", "expiry":"24", "orderItems":[ { "productSKU":"12222", "description":"<%= course.coursename %>", "price":"<%= course.courseprice * 20 %>", "quantity":"1" } ] }},"http://localhost:3000/user/profile/getVal", "http://localhost:3000/user/profile/getVal")'
+                                    src="https://www.atfawry.com/assets/img/FawryPayLogo.jpg" />
+
+                                <% } %>
+                                <div class="modal fade"
+                                    id="instructorModal<%= ((globalIndex + 1) * 2) + (localIndex + 1) %>" tabindex="-1"
+                                    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 style="width: 100%" class="modal-title text-center"
+                                                    id="exampleModalLabel">About the instructor
+                                                    <%= course.instructorID.fullname %>
+                                                    <span class="user-icon"><i class="far fa-user"></i></span></h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="text-center">
+                                                    <div class="imageForInstructor">
+                                                        <img class="shadow"
+                                                            src="../assets/uploads/<%= course.instructorID.avatar %>"
+                                                            title="Course Center" alt="Course Center"
+                                                            style="height: 100px; width: 100px; border-radius: 50%; border: 1px solid #888" />
+                                                    </div>
+                                                    <div class="mt-1 fullnameForInstructor text-primary">
+                                                        <span
+                                                            class="fullname"><%= course.instructorID.fullname %></span>
+                                                        <span class="badge badge-info">Instructor</span>
+                                                    </div>
+                                                    <div class="bioForInstructor text-muted">
+                                                        <p><%= course.instructorID.bio %></p>
+                                                    </div>
+                                                    <div class="followForProfile">
+                                                        <a href="/user/profile/reviews/<%= course.instructorID._id %>"
+                                                            target="_blank" class="btn btn-warning">
+                                                            <span class="follow-word">Reviews</span>
+                                                            <span class="follow-icon"><i class="far fa-star"></i></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer justify-content-center">
+                                                <span class="d-flex align-items-center"
+                                                    style="background-color:transparent; color: #424141; border: 1px solid #929292; border-radius: .25rem; font-size: 75%; padding: .25em .4em">Gender
+                                                    is <%= course.instructorID.gender %> <i
+                                                        class="pl-1 fas fa-mars-stroke" aria-hidden="true"></i></span>
+                                                <span class="ml-2 d-flex align-items-center"
+                                                    style="background-color:transparent; color: #424141; border: 1px solid #929292; border-radius: .25rem; font-size: 75%; padding: .25em .4em">Location
+                                                    is <%= course.instructorID.location %> <i
+                                                        class="pl-1 far fa-compass" aria-hidden="true"></i></span>
+                                                <span class="ml-2 d-flex align-items-center"
+                                                    style="background-color:transparent; color: #424141; border: 1px solid #929292; border-radius: .25rem; font-size: 75%; padding: .25em .4em">Phone
+                                                    number is <%= course.instructorID.phone %> <i
+                                                        class="pl-1 fas fa-phone" aria-hidden="true"></i></span>
+                                            </div>
+                                            <div class="modal-footer justify-content-center">
+                                                <span class="d-flex align-items-center"
+                                                    style="background-color:transparent; color: #424141; border: 1px solid #929292; border-radius: .25rem; font-size: 75%; padding: .25em .4em">Center
+                                                    Location
+                                                    is <%= course.centerlocation %> <i
+                                                        class="pl-1 far fa-compass"></i></span>
+                                                <span class="d-flex align-items-center"
+                                                    style="background-color:transparent; color: #424141; border: 1px solid #929292; border-radius: .25rem; font-size: 75%; padding: .25em .4em">Center
+                                                    Address
+                                                    is <%= course.centerplace %> <i
+                                                        class="pl-1 fas fa-map-marker-alt"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% if(course.courselimited !== course.users.length) { %>
+                                <div class="modal fade"
+                                    id="paymentByCash<%= ((globalIndex + 1) * 2) + (localIndex + 1) %>" tabindex="-1"
+                                    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 style="width: 100%" class="modal-title text-center"
+                                                    id="exampleModalLabel">Payment by Cash
+                                                    <span class="user-icon"><i class="far fa-money-bill-alt"></i></span>
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h3>Booking course by cash method</h3>
+                                                <p>You will pay money to this instructor by paying money to him on his
+                                                    mobile phone number and when he accepts you to be one of the group,
+                                                    the checkmark color will be green instead of red</p>
+                                                <div class="alert alert-danger alert-dismissible fade show"
+                                                    role="alert">
+                                                    <strong>Messsage</strong> <span> After paying click on submit
+                                                    </span>
+                                                </div>
+                                                <form class="paymentByCash" id="paymentByCash" method="POST"
+                                                    action="/user/profile/paymentByCash">
+                                                    <input type="hidden" name="instructorID"
+                                                        value="<%= course.instructorID._id %>" />
+                                                    <input type="hidden" name="courseID" value="<%= course._id %>" />
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i
+                                                                    class="fas fa-mobile-alt"></i></span>
+                                                        </div>
+                                                        <input readonly placeholder="Instructor Phone number"
+                                                            class="form-control" name="instructorPhoneNUmber"
+                                                            type="text" value="<%= course.instructorID.phone %>">
+                                                        <div class="input-group-prepend">
+                                                            <button type="submit" class="btn btn-primary btn-sm">Submit
+                                                                <i class="fas fa-sync-alt"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <% for(var i = 0; i < course.users.length; i++) { %>
+                                                <% if(user.id == course.users[i].userID && course.users[i].acceptanceStatus === true) { %>
+                                                <h4 class="forStatus text-primary">
+                                                    <span class="status-word">Status: </span>
+                                                    <span class="icon"><i class="far fa-check-square"></i></span>
+                                                </h4>
+                                                <% break %>
+                                                <% } %>
+                                                <% } %>
+                                                <% if(i === course.users.length) { %>
+                                                <h4 class="forStatus text-danger">
+                                                    <span class="status-word">Status: </span>
+                                                    <span class="icon"><i class="far fa-times-circle"></i></span>
+                                                </h4>
+                                                <% } %>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <div class="left-content-for-image">
+                                    <img class="shadow" src="../assets/centerphotos/<%= course.centerphoto %>"
+                                        title="Course Center" alt="Course Center"
+                                        style="height: 100px; width: 100px; border-radius: 50%; border: 1px solid #888" />
+                                </div>
+                                <div class="right-content-for-coursebio pl-2" style="width: calc(100% - 100px)">
+
+                                    <h4 class="text-primary m-0"><span class="coursename"><%- course.coursename %>
+                                            Course</span>
+                                        <span class="badge badge-info"><%= count %> / <%= course.courselimited %></span>
+                                    </h4>
+                                    <h4 class="text-primary m-0 mt-1">
+                                        <span
+                                            class="courseprice badge badge-success">Price:<%= course.courseprice %></span>
+                                        <span
+                                            class="courselimited badge badge-info">Limited:<%= course.courselimited %></span>
+                                    </h4>
+                                    <p class="mt-1 mb-0 text-muted" style="font-size: 15px"><%= course.coursebio %></p>
+                                </div>
+                            </div>
+                            <div class="coursestart-courseend-videoIntro">
+                                <div class="d-flex justify-content-center">
+                                    <span class="d-flex align-items-center"
+                                        style="background-color:transparent; color: #424141; border: 1px solid #929292; border-radius: .25rem; font-size: 75%; padding: .25em .4em">Start
+                                        in <%= moment(course.coursestart).format('DD-MMM-YYYY') %> <i
+                                            class="pl-1 far fa-clock"></i></span>
+                                    <span class="ml-2 d-flex align-items-center"
+                                        style="background-color:transparent; color: #424141; border: 1px solid #929292; border-radius: .25rem; font-size: 75%; padding: .25em .4em">End
+                                        in <%= moment(course.courseend).format('DD-MMM-YYYY') %> <i
+                                            class="pl-1 far fa-clock"></i></span>
+                                    <button type="button" class="btn btn-outline-primary ml-2 btn-sm"
+                                        data-toggle="modal"
+                                        data-target="#videoModal<%= ((globalIndex + 1) * 2) + (localIndex + 1) %>">Watch
+                                        Video <i class="fa fa-play-circle-o"></i></button>
+                                    <div class="modal fade"
+                                        id="videoModal<%= ((globalIndex + 1) * 2) + (localIndex + 1) %>" tabindex="-1"
+                                        role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                        <%= course.coursename %> Course Video
+                                                        Introduction <i class="far fa-play-circle"></i></h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>Watch video now <i class="far fa-play-circle"></i></h5>
+                                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla
+                                                        nemo aliquid sunt perspiciatis iusto nostrum voluptatibus
+                                                        reprehenderit, nobis distinctio velit facilis voluptatem aperiam
+                                                        ipsum cumque numquam modi molestiae doloribus incidunt?</p>
+                                                    <video id="my-video" class="video-js vjs-theme-forest" controls
+                                                        preload="auto" width="640" height="264" data-setup="{}">
+                                                        <source src="../assets/coursevideos/<%= course.coursevideo %>"
+                                                            type="video/mp4" />
+                                                        <p class="vjs-no-js">
+                                                            To view this video please enable JavaScript, and consider
+                                                            upgrading to a
+                                                            web browser that
+                                                            <a href="https://videojs.com/html5-video-support/"
+                                                                target="_blank">supports HTML5 video</a>
+                                                        </p>
+                                                    </video>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <% }); %>
+                </div>
+                <% }); %>
+                <% } %>
+            </div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">Profile</div>
+            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">Contact</div>
+        </div>
+
+    </div>
+
+    <% if(user.role === "User") { %>
+    <div class="flashContent" id="flashContent" style="position: fixed; left: 15px; bottom: 15px; z-index: 999"></div>
+    <% } %>
+
+
+    <% if(user.role === "User") { %>
+
+    <button id="messageToUserButton" type="button" class="btn btn-primary" data-toggle="modal"
+        data-target="#messageToUser" style="display: none;">
+        Launch demo modal
+    </button>
+    <div class="modal fade" id="messageToUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Important Notification</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>We have set default tags for you. You must know that we select twenty random courses based on
+                        your tags, so You can change the default tags from the Edit Info</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+    
+    <%# FontAwesome Included as JS %>
+    <script src="https://kit.fontawesome.com/8c190c8b3a.js"></script>
+
+    
+    <%# Bootstrap4 Package Included as JS %>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js "
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo "
+        crossorigin="anonymous "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js "
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 "
+        crossorigin="anonymous "></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js "
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM "
+        crossorigin="anonymous "></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+    <%# Typeahead to use Search Engine %>
+    <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
+    <script src="../assets/js/searchEngine.js"></script>
+
+    <%# For Uploading File and making the videoJS take the full width of its parent %>
+    <script>
+        $(() => {
+            $(".custom-file-input").on("change", function () {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            });
+            $(".video-js").css("width", "100%")
+        })
+    </script>
+    
+    <%# Lightbox for the profile image %>
+    <script src="../assets/js/lightbox.js"></script>
+
+    <%# VideoJS as Javascript %>
+    <script src="//vjs.zencdn.net/7.3.0/video.min.js"></script>
+
+    <%# SlickJS to make carousel %>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script>
+        $(() => {
+            $('.course').slick({
+                infinite: false,
+                dots: false,
+                speed: 1000,
+                slidesToShow: 5,
+                slidesToScroll: 2
+            });
+        })
+    </script>
+    
+    <%# IntroJS to learn you how to use the website %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/intro.min.js"></script>
+
+    <% if(user.role === "User") { %>
+    <%# These Scripts are shown only to the User %>
+    <script src="https://www.atfawry.com/ECommercePlugin/scripts/FawryPay.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script>
+        $(() => {
+            var socket = io()
+            socket.emit("join", "<%= user.id %>");
+            socket.on("courseData", data => {
+                $("#flashContent").html(`
+                    <div class="flashMessage" class="alert alert-danger alert-dismissible fade show" role="alert" role="alert" style="width: 275px; font-size: 14px;">
+                        <audio autoplay class="d-none">
+                            <source src="../assets/sounds/notification.mp3" type="audio/mpeg">
+                         </audio>
+                        <strong>Important Notification!</strong><br> ${data.coursename} Course is created now. You can visit the course link on <a target="_blank" href="/course/${data.courseID}">Visit</a> </span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                 </div>
+                `);
+            })
+
+        })
+    </script>
+    <script src="../assets/js/jquery.amsify.suggestags.js"></script>
+    <script>
+        $(() => {
+            $('input[name="tags"]').amsifySuggestags({
+                suggestions: ["Photoshop", "Adobe Illustrator", "Drawing", "Digital Painting", "InDesign", "Marketing Strategy", "Facebook Marketing", "Google Analytics", "Email Marketing", "Business Strategy", "Cisco CCNA", "CompTIA A+", "AWS Certified Cloud Practitioner", "CompTIA Security+", "CompTIA Network+", "SQL", "MySQL", "Data Modeling", "Data Analysis", "Big Data", "PLC", "Electronics", "Arduino", "Cell Phone Repair", "Microcontroller", "HTML and CSS", "JavaScript and jQuery", "Bootstrap4", "Pug and SASS", "VueJS", "PHP and Laravel", "NodeJS and ExpressJS", "Python and DJango", "ASP.Net backend", "C# backend", "JavaScript", "Java", "Python", "React", "C++", "Finance", "Entrepreneurship", "Communications", "Management", "Sales", "Linux", "Windows Server", "Linux Administration", "Shell Scripting", "Active Directory"],
+                whiteList: true,
+                tagLimit: 5
+            });
+        })
+    </script>
+    <script>
+        $(() => {
+            const visited = localStorage.getItem('visited');
+            if (!visited) {
+                $("#messageToUserButton").click();
+                localStorage.setItem('visited', true);
+            }
+        })
+    </script>
+    <% } %>
+</body>
+
+</html>

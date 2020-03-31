@@ -1,0 +1,95 @@
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white static-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/home" data-toggle="tooltip" data-placement="bottom"
+            title="Online Course Booking">
+            <img src="../../assets/images/logo.png" alt="Online Course Booking" title="Online Course Booking"
+                style="height: 50px; width: 50px; border-radius: 50%">
+            <span class="website-name">Online Course Booking</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+            aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <% if(user) { %>
+            <form class="form-inline my-2 my-lg-0">
+                <div class="Typeahead">
+                    <div class="u-posRelative">
+                        <input class="Typeahead-hint" type="text" tabindex="-1" readonly>
+                        <input class="defaultTI border" id="demo-input" type="text" name="q"
+                            placeholder="Search about Course...">
+                        <img class="Typeahead-spinner" src="../../assets/images/spinner.gif">
+                        <span class="moveIcon"><i class="fas fa-search"></i></span>
+                    </div>
+                    <div class="Typeahead-menu"></div>
+                </div>
+            </form>
+            <% } %>
+            <ul class="navbar-nav ml-auto">
+                <% if(user) { %>
+                <a class="btn btn-primary d-flex align-items-center" target="_blank" href="/notifications">Notifications  <span><i class="far fa-bell"></i></span></a>
+                <div class="dropdown">
+                    <button class="dropdown-toggle" style="border: none; background-color: transparent;; outline: none;"
+                        type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <img src="../assets/uploads/<%= user.avatar %>"
+                            style="height: 50px; width: 50px; border-radius: 50%" />
+                        <h6 style="display: inline"><%= user.fullname %></h6>
+                    </button>
+                    <div class="dropdown-menu"
+                        style="border: none; box-shadow: 0 0 20px #DDD; border-radius: 4px; right: 0 ; top: 105%"
+                        aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" style=" padding: 0.5rem 2rem" href="/user/profile"><i
+                                class="far fa-user"></i> Account</a>
+                        <a class="dropdown-item" style=" padding: 0.5rem 2rem" href="/bookedCourses"><i
+                                class="fab fa-discourse"></i> Booked Courses</a>
+                        <a class="dropdown-item" style=" padding: 0.5rem 2rem" href="/bookedCourses"><i
+                                class="fas fa-cog"></i> Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" style=" padding: 0.5rem 2rem" href="/user/profile/logout"><i
+                                class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+
+                <% } else { %>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/home" data-toggle="tooltip" data-placement="bottom"
+                        title="Home Page">Home
+                        <span class="sr-only">(current)</span> <i class="fas fa-home"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about" data-toggle="tooltip" data-placement="bottom"
+                        title="About Page">About <i class="fas fa-biohazard"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/terms" data-toggle="tooltip" data-placement="bottom"
+                        title="Terms Page">Terms <i class="fab fa-teamspeak"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/privacy" data-toggle="tooltip" data-placement="bottom"
+                        title="Privacy Page">Privacy <i class="fas fa-user-secret"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact" data-toggle="tooltip" data-placement="bottom"
+                        title="Contact Page">Contact <i class="far fa-id-badge"></i></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        User <i class="far fa-user"></i>
+                    </a>
+                    <div class="dropdown-menu collapse" aria-labelledby="navbarDropdown">
+                        <p class="lead text-center">Role as user</p>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/user/signup">Signup as user <i class="fas fa-user-plus"></i></a>
+                        <a class="dropdown-item" href="/user/login">Login as user <i class="fas fa-sign-in-alt"></i></a>
+                    </div>
+                </li>
+                <% }%>
+            </ul>
+
+        </div>
+    </div>
+</nav>

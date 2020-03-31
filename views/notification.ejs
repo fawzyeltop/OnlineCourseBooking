@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../assets/css/main.css" rel="stylesheet" />
+
+    <link rel="shortcut icon" type="image/png" href="../assets/images/logo.png" />
+
+    <link rel="stylesheet" href="../assets/css/typeahead.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap" rel="stylesheet">
+    <link href="../assets/css/lightbox.css" rel="stylesheet" />
+    <title>
+        <%= user.fullname %>
+    </title>
+</head>
+
+<body>
+    <%- include('./partials/navbar.ejs') -%>
+    <div class="container-fluid py-3" style="background-color: #3a4352">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="f-content text-white">
+                        <h5 class="m-0">Here are the notifications of courses that are based on your tags [Last 24 hours]</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid py-3" style="background-color: #29303B">
+        <div class="container">
+            <% notifications.forEach((notification) => { %>
+            <div class="row mt-3">
+                <% notification.forEach((notify) => { %>
+                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                    <div class="notification p-2 bg-white rounded-lg">
+                        <h3>Notification <i class="far fa-bell"></i></h3>
+                        <p style="font-size: 14px"><strong>(1)</strong> Notification about <span class="badge badge-info"><%= notify.courseID.coursename %></span> </p>
+                        <p style="font-size: 14px"><strong>(2)</strong> Course Price is <span class="badge badge-info"><%= notify.courseID.courseprice %> </span></p>
+                        <p style="font-size: 14px"><strong>(3)</strong> Enrolled Users are <span class="badge badge-info"><%= notify.courseID.users.length %>/<%= notify.courseID.courselimited %></span> </p>
+                        <a class="btn btn-sm btn-primary" target="_blank" href="/course/<%= notify.courseID._id %>">Visit Course now</a>
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+    <div id="flashMessage" class="alert alert-success alert-dismissible fade show" role="alert"
+        style="width: 275px; font-size: 14px; position: fixed; display: none; left: 15px; bottom: 15px; z-index: 555">
+    </div>
+    <script src="https://kit.fontawesome.com/8c190c8b3a.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js "
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo "
+        crossorigin="anonymous "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js "
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 "
+        crossorigin="anonymous "></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js "
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM "
+        crossorigin="anonymous "></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
+    <script src="../assets/js/searchEngine.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script>
+        $(() => {
+            var socket = io()
+            socket.emit("join", "<%= user.id %>");
+            socket.on("courseData", data => {
+                $("#flashMessage").html(`
+                <audio autoplay class="d-none">
+                    <source src="../assets/sounds/notification.mp3" type="audio/mpeg">
+                </audio>
+                <strong>Important Notification!</strong><br> ${data.coursename} Course is created now. You can visit the course link on <a target="_blank" href="/course/${data.courseID}">Visit</a> </span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                `).fadeIn(250).delay(5000).fadeOut(250);
+            })
+
+        })
+    </script>
+</body>
+
+</html>

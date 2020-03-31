@@ -1,0 +1,160 @@
+/* Typeahead */
+
+.Typeahead {
+    position: relative;
+    *z-index: 1;
+    height: auto;
+    width: 400px;
+  }
+  .Typeahead .moveIcon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #888;
+  }
+  .Typeahead-spinner {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    display: none;
+    width: 28px;
+    height: 28px;
+  }
+  
+  .Typeahead .Typeahead-hint,
+  .Typeahead .Typeahead-input {
+    width: 100%;
+    padding: 5px;
+    padding-left: 30px;
+    font-size: 17px;
+    line-height: 30px;
+    border: none;
+    background-color: #F7F7F7;
+    border-radius: 4px;
+  }
+  
+  .Typeahead-hint {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #ccd6dd;
+    opacity: 1;
+  }
+  
+  .Typeahead-input {
+    position: relative;
+    background-color: transparent;
+    outline: none;
+  }
+  
+  .Typeahead-menu {
+    position: absolute;
+    z-index: 100;
+    display: none;
+    width: 100%;
+    overflow: hidden;
+    background-color: #FFFFFF;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 5px 8px #DDD;
+  }
+  
+  .Typeahead-menu.is-open {
+    display: block;
+  }
+
+
+  /* ProfileCard */
+
+.ProfileCard {
+  position: relative;
+  padding: 8px;
+}
+
+.ProfileCard-avatar {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 52px;
+  height: 52px;
+  border: 2px solid #ccd6dd;
+  border-radius: 5px;
+}
+
+.ProfileCard:hover .ProfileCard-avatar {
+  border-color: #f5f8fa;
+}
+
+.ProfileCard-details {
+  min-height: 60px;
+  padding-left: 60px;
+}
+
+.ProfileCard-realName,
+.ProfileCard-screenName {
+  display: inline-block;
+}
+
+.ProfileCard-realName {
+  font-weight: 700;
+}
+
+.ProfileCard-screenName {
+  color: #8899a6;
+}
+
+.ProfileCard-description {
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.ProfileCard-stats {
+  float: right;
+  text-align: right;
+}
+
+.ProfileCard-stat {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.ProfileCard-stat-label {
+  color: #8899a6;
+  font-weight: 500;
+}
+
+.ProfileCard-stat + .ProfileCard-stat {
+  margin-left: 5px;
+}
+
+.Typeahead-suggestion {
+  text-decoration: none;
+  color: #555;
+  border-bottom: 1px solid #DDD;
+}
+
+
+.ProfileCard:hover,
+.ProfileCard.is-active {
+  color: #fff;
+  background: #55acee;
+}
+
+.anchor:hover .ProfileCard-screenName,
+.ProfileCard:hover .ProfileCard-stat-label,
+.ProfileCard.is-active .ProfileCard-screenName,
+.ProfileCard.is-active .ProfileCard-stat-label {
+  color: #fff !important;
+}
+
+.EmptyMessage {
+  position: relative;
+  padding: 10px;
+  font-size: 16px;
+  line-height: 30px;
+  text-align: center;
+
+}
+  
+  
